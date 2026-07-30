@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+*.egg
+.venv/
+venv/
+
+# Backend data (runtime files, not source)
+backend/data/
+backend/uploads/
+backend/.env
+
+# Pytest cache
+backend/.pytest_cache/
+backend/.coverage
+
+# Node.js / Vite
+frontend/node_modules/
+frontend/dist/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Claude session data (do not commit conversation logs)
+.claude/settings.local.json
+
+# Temporary files
+*.log
+*.tmp

@@ -1,0 +1,44 @@
+# Web Framework
+fastapi>=0.115,<1.0
+uvicorn[standard]>=0.34,<1.0
+python-multipart>=0.0.20,<1.0
+
+# RAG Framework
+langchain>=1.0,<2.0
+langchain-community>=0.4,<1.0
+langchain-openai>=0.3,<1.0
+
+# Database
+sqlalchemy[asyncio]>=2.0,<3.0
+aiosqlite>=0.21,<1.0
+
+# Vector Store
+chromadb>=1.0,<2.0
+
+# Auth
+python-jose[cryptography]>=3.3,<4.0
+passlib[bcrypt]>=1.7,<2.0
+bcrypt>=4.0,<5.0
+
+# Document Parsing
+PyMuPDF>=1.25,<2.0
+python-docx>=1.1,<2.0
+beautifulsoup4>=4.13,<5.0
+markdown>=3.7,<4.0
+
+# Cache
+cachetools>=6.0,<7.0
+redis>=5.0,<6.0
+
+# HTTP Client
+httpx>=0.28,<1.0
+
+# Rate Limiting
+slowapi>=0.1,<1.0
+
+# Logging
+structlog>=25.0,<26.0
+
+# Utils
+python-dotenv>=1.1,<2.0
+pydantic-settings>=2.0,<3.0
