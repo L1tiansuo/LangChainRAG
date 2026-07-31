@@ -46,9 +46,11 @@ async def login_user(db: AsyncSession, username: str, password: str) -> dict:
     if not user.is_active:
         raise_app_error(("ACCOUNT_DISABLED", "账户已被禁用"), 403)
 
-    # Update last login
+    # Update last login asynchronously (delayed, fires after response)
     user.last_login_at = datetime.now(timezone.utc)
-    await db.flush()
+    # Don't flush here — the get_db dependency will commit this along with
+    # the session's natural lifecycle. Under high concurrency, SQLite will
+    # serialize writes via WAL mode without blocking the read path.
 
     access_token = create_access_token(
         data={"sub": user.id, "role": user.role, "username": user.username}

@@ -23,13 +23,28 @@ def check_tool(check_cmd: str) -> bool:
 
 
 def start_in_new_window(title: str, cwd: Path, *args: str) -> None:
-    """Launch a command in a new console window with the given title.
+    """Launch a command in a new console window.
 
-    Uses Windows `start` command. The process is not tracked directly;
-    we save the window title for later lookup in stop.py.
+    Uses CREATE_NEW_CONSOLE for a visible window. The window title
+    is set via a batch wrapper to avoid quoting issues with start.
     """
-    cmd = f'start "{title}" /D "{cwd}" {" ".join(args)}'
-    subprocess.Popen(cmd, shell=True)
+    import tempfile
+
+    # Write a tiny batch script that sets the title then runs the command
+    bat = tempfile.NamedTemporaryFile(
+        mode="w", suffix=".bat", delete=False, encoding="utf-8"
+    )
+    bat.write(f"@echo off\n")
+    bat.write(f"title {title}\n")
+    bat.write(f"cd /d {cwd}\n")
+    bat.write(" ".join(args) + "\n")
+    bat.write("pause\n")
+    bat.close()
+
+    subprocess.Popen(
+        [bat.name],
+        creationflags=subprocess.CREATE_NEW_CONSOLE,
+    )
 
 
 def main():
