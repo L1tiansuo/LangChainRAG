@@ -44,9 +44,9 @@ check_marker() {
   # Check if marker is stale (HEAD has changed since marker was written)
   saved_head=$(python -c "import json; print(json.load(open('$file')).get('gitHead',''))" 2>/dev/null)
   if [ -n "$saved_head" ] && [ "$saved_head" != "$HEAD" ]; then
-    # Only fail if head check field exists AND differs
-    # (allow markers without gitHead for backward compatibility)
-    :
+    echo "FAIL: ${name} marker is stale (code has changed since last check)." >&2
+    echo "  Run Agent(gitcommit-agent) to re-run checks." >&2
+    return 1
   fi
 
   echo "PASS: ${name} marker valid"
