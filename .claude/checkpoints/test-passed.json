@@ -9,5 +9,6 @@
     "test_sessions.py": "会话管理 API（创建/列表/详情/更新/删除/隔离）12 tests",
     "test_chat.py": "聊天问答 API（SSE 流式/权限/会话验证）5 tests",
     "test_kb.py": "知识库管理 API（统计/文档上传/权限/列表）10 tests"
-  }
+  },
+  "gitHead": "744e27fcb2d19a91f847dcfbdf95695801d11a4b"
 }

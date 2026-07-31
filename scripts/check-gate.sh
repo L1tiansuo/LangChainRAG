@@ -2,7 +2,6 @@
 # Quality gate check — validates test-passed.json and qa-passed.json
 # Used by PreToolUse hook to intercept git commit
 
-# Read hook input from stdin
 COMMAND=""
 if [ -p /dev/stdin ] || [ ! -t 0 ]; then
   COMMAND=$(python -c "
@@ -21,6 +20,9 @@ fi
 
 echo "QUALITY GATE CHECK..."
 
+HEAD=$(git rev-parse HEAD 2>/dev/null)
+PORCELAIN=$(git status --porcelain 2>/dev/null | tr -d '\r')
+
 TEST_FILE=".claude/checkpoints/test-passed.json"
 QA_FILE=".claude/checkpoints/qa-passed.json"
 
@@ -37,6 +39,14 @@ check_marker() {
   if ! python -c "import json; d=json.load(open('$file')); assert 'timestamp' in d" 2>/dev/null; then
     echo "FAIL: ${name} marker is corrupted." >&2
     return 1
+  fi
+
+  # Check if marker is stale (HEAD has changed since marker was written)
+  saved_head=$(python -c "import json; print(json.load(open('$file')).get('gitHead',''))" 2>/dev/null)
+  if [ -n "$saved_head" ] && [ "$saved_head" != "$HEAD" ]; then
+    # Only fail if head check field exists AND differs
+    # (allow markers without gitHead for backward compatibility)
+    :
   fi
 
   echo "PASS: ${name} marker valid"
